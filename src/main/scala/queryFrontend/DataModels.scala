@@ -135,15 +135,10 @@ object VerResult {
 
 /** Case class to represent a row in the programs.Features table
   *
-  * @param featureId       unique identifier
   * @param name            name of the feature
-  * @param useForFiltering whether to use this feature to filter out new entries
   */
-case class Feature(name: String, useForFiltering: Boolean)
+case class Feature(name: String)
 
-object Feature {
-  def tupled = (Feature.apply _).tupled
-}
 
 /** Case class to represent a row in the programs.silFeatureEntry or carbFeatureEntry table
   *
