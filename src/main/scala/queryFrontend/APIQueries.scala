@@ -90,9 +90,31 @@ object APIQueries {
     counts
   }
 
-  def getRegexMatchResultsDetailed(regex: String): Seq[PatternMatchResult] = {
+  /** @param regex regex string to match database programs against, should not include flags, i.e. "regex", not "/regex/gmi"
+    * @param flags flags from [[java.util.regex.Pattern]] or-ed together
+    *
+    * UNIX_LINES = 0x01
+    *
+    * CASE_INSENSITIVE = 0x02
+    *
+    * COMMENTS = 0x04
+    *
+    * MULTILINE = 0x08
+    *
+    * LITERAL = 0x10
+    *
+    * DOTALL = 0x20
+    *
+    * UNICODE_CASE = 0x40
+    *
+    * CANON_EQ = 0x80
+    *
+    * UNICODE_CHARACTER_CLASS = 0x100
+    */
+  def getRegexMatchResultsDetailed(regex: String, flags: Int = 0): Seq[PatternMatchResult] = {
     val queryObj = Obj(
-      "regex" -> write(regex)
+      "regex" -> write(regex),
+      "flags" -> write(flags)
     )
     val response = requests.post(s"$API_HOST/match-regex-detailed", data = queryObj)
     val matches =
@@ -104,9 +126,13 @@ object APIQueries {
     matches
   }
 
-  def getRegexMatchResults(regex: String): Seq[Long] = {
+  /** @param regex see [[getRegexMatchResultsDetailed]]
+    * @param flags see [[getRegexMatchResultsDetailed]]
+    */
+  def getRegexMatchResults(regex: String, flags: Int = 0): Seq[Long] = {
     val queryObj = Obj(
-      "regex" -> write(regex)
+      "regex" -> write(regex),
+      "flags" -> write(flags)
     )
     val response = requests.post(s"$API_HOST/match-regex", data = queryObj)
     val matches =
