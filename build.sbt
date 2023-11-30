@@ -14,7 +14,8 @@ lazy val vdc_query_frontend = (project in file("."))
     libraryDependencies += munit % Test,
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "requests" % "0.8.0",
-      "com.lihaoyi" %% "upickle" % "3.0.0"
+      "com.lihaoyi" %% "upickle" % "3.0.0",
+      "org.scalatest" %% "scalatest" % "3.2.11" % Test
     )
   )
 
