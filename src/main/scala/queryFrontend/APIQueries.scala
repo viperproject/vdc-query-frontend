@@ -9,6 +9,9 @@ import Config._
 
 object APIQueries {
 
+  /** Returns all programEntries from the database that match the given metadata. Default values match all programEntries.
+    * If a parameter is an [[Option]] and you pass [[None]], the entries aren't filtered for that value.
+    */
   def getProgramEntriesByMetaData(
     earliestDate: Timestamp = Timestamp.valueOf(LocalDateTime.of(1970, 1, 1, 1, 1)),
     latestDate: Timestamp = Timestamp.valueOf(LocalDateTime.of(2100, 1, 1, 1, 1)),
@@ -37,6 +40,7 @@ object APIQueries {
     entries
   }
 
+  /** Returns a list of ids for all programEntries that have a [[VerifierResult]] which produced [[feature]] with the value of [[value]] */
   def getProgramIdsByFeatureValue(feature: String, value: String): Seq[Long] = {
     val ids =
       try {
@@ -48,6 +52,7 @@ object APIQueries {
     ids
   }
 
+  /** Returns all Silicon [[VerifierResult]]s for the given programEntryIds. This is a 1:many relationship */
   def getSiliconResultsByIds(entryIds: Seq[Long]): Seq[VerResult] = {
     val queryObj = Obj(
       "entryIds" -> entryIds
@@ -62,6 +67,7 @@ object APIQueries {
     res
   }
 
+  /** Returns all Carbon [[VerifierResult]]s for the given programEntryIds. This is a 1:many relationship */
   def getCarbonResultsByIds(entryIds: Seq[Long]): Seq[VerResult] = {
     val queryObj = Obj(
       "entryIds" -> entryIds
@@ -76,6 +82,7 @@ object APIQueries {
     res
   }
 
+  /** Returns a list of (Frontend, Count) tuples for the given programEntryIds */
   def getFrontendCountByIds(entryIds: Seq[Long]): Seq[(String, Int)] = {
     val queryObj = Obj(
       "entryIds" -> entryIds
@@ -165,7 +172,10 @@ object APIQueries {
     requests.post(s"$API_HOST/submit-program", data = submission)
   }
 
-  def getResponseObj(url: String, data: Obj): Obj = {
+  /** Takes an [[url]] and queries it with a GET request if [[data]] == [[null]], else a POST request with the [[data]] as the query body.
+    * Returns the response body as a [[ujson.Obj]]
+    */
+  private def getResponseObj(url: String, data: Obj): Obj = {
     val response = if (data == null) {
       requests.get(url)
     } else {
