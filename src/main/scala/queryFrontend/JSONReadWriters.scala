@@ -12,7 +12,8 @@ object JSONReadWriters {
       t => s"${t.getTime}",
       str => new Timestamp(str.toLong)
     )
-  implicit val veRW: RW[VerError]            = macroRW
-  implicit val vrRW: RW[VerResult]           = macroRW
-  implicit val pmrRW: RW[PatternMatchResult] = macroRW
+  implicit val veRW: RW[VerError]                      = macroRW
+  implicit val vrRW: RW[VerResult]                     = macroRW
+  implicit val pmrRW: RW[PatternMatchResult]           = macroRW
+  implicit val vvdsRW: RW[VerVersionDifferenceSummary] = macroRW
 }

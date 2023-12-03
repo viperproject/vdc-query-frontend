@@ -82,6 +82,40 @@ object APIQueries {
     res
   }
 
+  /** Returns a [[queryFrontend.VerVersionDifferenceSummary]] summarizing differences between SiliconResults of the two given
+    * Silicon versions. Only results that are already in the database are taken into account, no new ones are generated.
+    */
+  def getSiliconVersionDifference(versionHash1: String, versionHash2: String): VerVersionDifferenceSummary = {
+    val summary =
+      try {
+        val json = getResponseObj(
+          s"$API_HOST/silicon-version-difference?versionHash1=$versionHash1&versionHash2=$versionHash2",
+          null
+        )
+        read[VerVersionDifferenceSummary](json("verVersionDifferenceSummary"))
+      } catch {
+        case e: Exception => e.printStackTrace(); null
+      }
+    summary
+  }
+
+  /** Returns a [[queryFrontend.VerVersionDifferenceSummary]] summarizing differences between CarbonResults of the two given
+    * Carbon versions. Only results that are already in the database are taken into account, no new ones are generated.
+    */
+  def getCarbonVersionDifference(versionHash1: String, versionHash2: String): VerVersionDifferenceSummary = {
+    val summary =
+      try {
+        val json = getResponseObj(
+          s"$API_HOST/carbon-version-difference?versionHash1=$versionHash1&versionHash2=$versionHash2",
+          null
+        )
+        read[VerVersionDifferenceSummary](json("verVersionDifferenceSummary"))
+      } catch {
+        case e: Exception => e.printStackTrace(); null
+      }
+    summary
+  }
+
   /** Returns a list of (Frontend, Count) tuples for the given programEntryIds */
   def getFrontendCountByIds(entryIds: Seq[Long]): Seq[(String, Int)] = {
     val queryObj = Obj(

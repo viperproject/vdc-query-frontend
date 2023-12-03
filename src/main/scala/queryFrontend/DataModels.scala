@@ -113,9 +113,7 @@ case class VerResult(
     lazy val sameRes: Boolean = if (this.success) {
       other.success
     } else {
-      val errorIds      = Set(this.errors map (_.fullId))
-      val otherErrorIds = Set(other.errors map (_.fullId))
-      !other.success && errorIds == otherErrorIds
+      !other.success && this.errorIdSet == other.errorIdSet
     }
     lazy val similarRuntime = similarTime(
       this.runtime,
@@ -123,6 +121,8 @@ case class VerResult(
     ) // either time in +-50% of other or +-2seconds (for variance in small programs)
     similarRuntime && sameRes
   }
+
+  def errorIdSet: Set[String] = (this.errors map (_.fullId)).toSet
 
   private def similarTime(t1: Long, t2: Long): Boolean = {
     ((t1 <= t2 * 1.5 && t1 >= t2 / 1.5) || (t1 - t2).abs <= 2000)
@@ -138,7 +138,6 @@ object VerResult {
   * @param name            name of the feature
   */
 case class Feature(name: String)
-
 
 /** Case class to represent a row in the programs.silFeatureEntry or carbFeatureEntry table
   *
@@ -169,9 +168,34 @@ case class VerError(fullId: String, message: String) {
 }
 
 /** Result of matching regex to a program
- *
- * @param programEntryId the program in which a match occurred
- * @param matchIndices   the line numbers indicating the start regions of the regex match
- */
-case class PatternMatchResult(programEntryId: Long, matchIndices: Seq[Int])
+  *
+  * @param programEntryId the program in which a match occurred
+  * @param matchIndices   the line numbers indicating the start regions of the regex match
+  */
+case class PatternMatchResult(programEntryId: Long, matchIndices: Seq[Int]) extends Serializable
 
+/** Case class to summarize the difference between [[VerResult]]s different Verifier versions. Only takes into account
+  * programs that have a [[VerResult]] for both versions in the database.
+  * @param versionHash1: First verifier version
+  * @param versionHash2: Second verifier version
+  * @param programIntersection List of programEntryIds that have a [[VerResult]] for both verifier versions
+  * @param successDiff: List of programEntryIds with different different success values in the [[VerResult]]
+  * @param runtimeDiff: List of programEntryIds whose runtime differs by more than 50% in the [[VerResult]]
+  * @param errorDiff: List of programEntryIds with different error types in the [[VerResult]]
+  * @param avgRuntime1 average runtime of all [[VerResult]]s with [[versionHash1]]
+  * @param avgRuntime2 average runtime of all [[VerResult]]s with [[versionHash2]]
+  * @param runtimeVar1 Variance of runtime of all [[VerResult]]s with [[versionHash1]]
+  * @param runtimeVar2 Variance of runtime of all [[VerResult]]s with [[versionHash2]]
+  */
+case class VerVersionDifferenceSummary(
+  versionHash1: String,
+  versionHash2: String,
+  programIntersection: Seq[Long],
+  successDiff: Seq[Long],
+  runtimeDiff: Seq[Long],
+  errorDiff: Seq[Long],
+  avgRuntime1: Long,
+  avgRuntime2: Long,
+  runtimeVar1: Long,
+  runtimeVar2: Long
+)
