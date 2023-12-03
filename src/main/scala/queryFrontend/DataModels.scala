@@ -93,6 +93,7 @@ object UserSubmission {
   * @param verifierHash   commit hash of the verifier version used to get this result
   * @param programEntryId id referring to the ProgramEntry that was verified
   * @param success        whether program verified successfully
+  * @param didTimeout     whether timeout occurred during verification
   * @param runtime        total time for verification
   * @param errors         errors encountered during verification - should be empty if [[success]]
   * @param phaseRuntimes  runtimes of the phases of the verifier
@@ -103,6 +104,7 @@ case class VerResult(
   verifierHash: String,
   programEntryId: Long,
   success: Boolean,
+  didTimeout: Boolean,
   runtime: Long,
   errors: Array[VerError],
   phaseRuntimes: Array[(String, Long)]
