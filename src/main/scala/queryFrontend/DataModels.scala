@@ -1,5 +1,7 @@
 package queryFrontend
 
+import queryFrontend.Config.TIME_DIFFERENCE_MULTIPLIER
+
 import java.sql.Timestamp
 
 trait Similarity[T] {
@@ -127,7 +129,7 @@ case class VerResult(
   def errorIdSet: Set[String] = (this.errors map (_.fullId)).toSet
 
   private def similarTime(t1: Long, t2: Long): Boolean = {
-    ((t1 <= t2 * 1.5 && t1 >= t2 / 1.5) || (t1 - t2).abs <= 2000)
+    ((t1 <= t2 * TIME_DIFFERENCE_MULTIPLIER && t1 >= t2 / TIME_DIFFERENCE_MULTIPLIER) || (t1 - t2).abs <= 2000)
   }
 }
 
