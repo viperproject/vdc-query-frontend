@@ -16,4 +16,5 @@ object JSONReadWriters {
   implicit val vrRW: RW[VerResult]                     = macroRW
   implicit val pmrRW: RW[PatternMatchResult]           = macroRW
   implicit val vvdsRW: RW[VerVersionDifferenceSummary] = macroRW
+  implicit val feRW: RW[FeatureEntry]                  = macroRW
 }
