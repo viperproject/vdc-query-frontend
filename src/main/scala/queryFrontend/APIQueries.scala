@@ -56,7 +56,7 @@ object APIQueries {
   def getFeatureValuesByProgramId(id: Long): Seq[FeatureEntry] = {
     val ids =
       try {
-        val json = getResponseObj(s"$API_HOST/program-ids-by-feature-value?entryId=$id", null)
+        val json = getResponseObj(s"$API_HOST/feature-values-by-program-id?entryId=$id", null)
         read[Seq[FeatureEntry]](json("featureEntries").arr)
       } catch {
         case e: Exception => e.printStackTrace(); Seq()
