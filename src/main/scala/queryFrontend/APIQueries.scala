@@ -140,6 +140,42 @@ object APIQueries {
     res
   }
 
+  /** Benchmarks all stored programs in the database with given Silicon version hash
+    *
+    * Warning: This can take multiple hours
+    */
+  def runSilVersionBenchmarker(versionHash: String): Unit = {
+    val queryObj = Obj(
+      "versionHash" -> versionHash
+    )
+    try {
+      getResponseObj(
+        s"$API_HOST/benchmark-silicon-version",
+        queryObj
+      )
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+  }
+
+  /** Benchmarks all stored programs in the database with given Carbon version hash
+    *
+    * Warning: This can take multiple hours
+    */
+  def runCarbVersionBenchmarker(versionHash: String): Unit = {
+    val queryObj = Obj(
+      "versionHash" -> versionHash
+    )
+    try {
+      getResponseObj(
+        s"$API_HOST/benchmark-carbon-version",
+        queryObj
+      )
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+  }
+
   /** Returns a [[queryFrontend.VerVersionDifferenceSummary]] summarizing differences between SiliconResults of the two given
     * Silicon versions. Only results that are already in the database are taken into account, no new ones are generated.
     */
