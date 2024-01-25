@@ -14,7 +14,6 @@ trait Similarity[T] {
   *
   * @param programEntryId   unique identifier for the entry
   * @param submissionDate   time when this entry was created
-  * @param originalName     the file name of the original viper program
   * @param program          the viper program in plaintext
   * @param loc              number of lines of code
   * @param frontend         Viper frontend that produced this program
@@ -26,7 +25,6 @@ trait Similarity[T] {
 case class ProgramEntry(
   programEntryId: Long,
   submissionDate: Timestamp,
-  originalName: String,
   program: String,
   loc: Int,
   frontend: String,
@@ -60,7 +58,6 @@ object ProgramEntry {
   *
   * @param submissionId     unique identifier for the entry
   * @param submissionDate   time when this entry was created
-  * @param originalName     the file name of the original viper program
   * @param program          the viper program in plaintext
   * @param loc              number of lines of code
   * @param frontend         Viper frontend that produced this program
@@ -72,7 +69,6 @@ object ProgramEntry {
 case class UserSubmission(
   submissionId: Long,
   submissionDate: Timestamp,
-  originalName: String,
   program: String,
   loc: Int,
   frontend: String,

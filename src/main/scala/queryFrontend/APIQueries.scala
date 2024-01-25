@@ -280,7 +280,6 @@ object APIQueries {
   }
 
   def submitProgram(
-    originalName: String,
     program: String,
     frontend: String,
     args: Array[String],
@@ -289,7 +288,6 @@ object APIQueries {
     runtime: Long
   ): Unit = {
     val submission = Obj(
-      "originalName"     -> originalName,
       "program"          -> program,
       "frontend"         -> frontend,
       "args"             -> Arr.from[String](args),

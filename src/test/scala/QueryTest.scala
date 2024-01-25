@@ -19,7 +19,6 @@ class QueryTest extends AnyFunSuite {
       val sampleUS = UserSubmission(
         0,
         Timestamp.valueOf(LocalDateTime.now()),
-        "sample.vpr",
         sampleProg,
         15,
         "Silicon",
@@ -29,7 +28,7 @@ class QueryTest extends AnyFunSuite {
         1500
       )
 
-      APIQueries.submitProgram("sample.vpr", sampleProg, "Silicon", Array("--timeout", "10"), "Silicon", true, 1500)
+      APIQueries.submitProgram(sampleProg, "Silicon", Array("--timeout", "10"), "Silicon", true, 1500)
       Process(s"$parentRoot/bash_scripts/run_scala_class.sh dataCollection.ProcessingPipeline").!
       val peByMD = APIQueries.getProgramEntriesByMetaData()
       assert(peByMD.length == 1)
