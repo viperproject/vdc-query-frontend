@@ -40,6 +40,19 @@ object APIQueries {
     entries
   }
 
+  /** Returns all programEntries from database whose programEntryId is contained in entryIds */
+  def getProgramEntriesByIds(entryIds: Seq[Long]): Seq[ProgramEntry] = {
+    val queryObj = Obj("entryIds" -> Arr.from[Long](entryIds))
+    val entries =
+      try {
+        val json = getResponseObj(s"$API_HOST/program-entries-by-ids", queryObj)
+        read[Seq[ProgramEntry]](json("programEntries").arr)
+      } catch {
+        case e: Exception => e.printStackTrace(); Seq()
+      }
+    entries
+  }
+
   /** Returns a list of ids for all programEntries that have a [[VerifierResult]] which produced [[feature]] with the value of [[value]] */
   def getProgramIdsByFeatureValue(feature: String, value: String): Seq[Long] = {
     val ids =
