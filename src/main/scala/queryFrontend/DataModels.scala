@@ -139,14 +139,15 @@ object VerResult {
   */
 case class Feature(name: String)
 
-/** Case class to represent a row in the programs.silFeatureEntry or carbFeatureEntry table
+/** Case class to represent a row in the programs.constFeatureEntry, programs.silFeatureEntry or carbFeatureEntry table
   *
   * @param featureEntryId unique identifier
   * @param featureId      foreign key for [[Feature]] that is referenced
-  * @param resultId       foreign key for [[VerResult]] in which this feature was created
+  * @param referenceId    foreign key for table in which this feature was created, sil & carb -> SiliconResults/CarbonResults,
+ *                       const -> ProgramEntries
   * @param value          value of the feature
   */
-case class FeatureEntry(featureEntryId: Long, featureName: String, resultId: Long, value: String)
+case class FeatureEntry(featureEntryId: Long, featureName: String, referenceId: Long, value: String)
 
 object FeatureEntry {
   def tupled = (FeatureEntry.apply _).tupled
